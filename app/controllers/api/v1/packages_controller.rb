@@ -3,7 +3,7 @@ module Api
     class PackagesController < BaseController
       def index
         packages = ::CacheRedis.pool.with { |redis| redis.keys('*') }
-        render json: packages
+        render json: packages, status: :ok
       end
 
       # parse cran file and store information in redis

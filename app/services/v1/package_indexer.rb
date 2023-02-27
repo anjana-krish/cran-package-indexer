@@ -14,6 +14,9 @@ module V1
                        title: pkg[:title], authors: pkg[:author], maintainers: pkg[:maintainer],
                        license: pkg[:license], url:)
       end
+    rescue StandardError => e
+      Rails.logger.error "Error in parsing CRAN package #{e.message}"
+      false
     end
 
     private
