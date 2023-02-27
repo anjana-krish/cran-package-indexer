@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+
+  cache-redis:
+    image: redis:6.2
+    # ports:
+      # - '6379:6379'
+    # volumes:
+    #   - cran-package-indexer-ms-generic-redis:/var/lib/cache-redis/data
+
+  rails-api:
+    build:
+      context: .
+      args:
+        USER_ID: "${USER_ID:-1000}"
+        GROUP_ID: "${GROUP_ID:-1000}"
+    command: ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
+    depends_on:
+      - cache-redis
+    volumes:
+      - type: bind
+        source: ./
+        target: /opt/app/cran-package-indexer-ms
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+
+volumes:
+  cran-package-indexer-ms-generic-redis:
